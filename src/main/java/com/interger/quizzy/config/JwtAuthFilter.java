@@ -70,7 +70,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities()
                         );
                     }
-
+                // added comment to check git user name
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
