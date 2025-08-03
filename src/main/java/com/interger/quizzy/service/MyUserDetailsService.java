@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -17,17 +19,20 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user= null;
-        if(username.contains("@")) {
-             user = userService.getUserByUserName(username);
-        }else{
-             user = userService.getUserByUserEmail(username);
+    public UserDetails loadUserByUsername(String userIdStr) throws UsernameNotFoundException {
+        Long userId;
+        try {
+            userId = Long.parseLong(userIdStr);
+        } catch (NumberFormatException e) {
+            throw new UsernameNotFoundException("Invalid user ID: " + userIdStr);
         }
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + username);
+        Optional<User> useropt = userService.getUserById(userId); // Add this method in UserService
+        if (useropt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with ID: " + userIdStr);
         }
-        return new MyUserPrincipal(user);
+
+        return new MyUserPrincipal(useropt.get());
     }
+
 }

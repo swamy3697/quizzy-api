@@ -14,35 +14,35 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private Long getCurrentUserId(){
-        // get the current user id from authentication manager
-    }
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse> getMyProfile() {
-        // ...
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        // ...
-    }
-
-    @GetMapping("/leaderboard")
-    public ResponseEntity<LeaderboardResponse> getLeaderboard() {
-        // ...
-    }
-
-    @PutMapping("/me")
-    public ResponseEntity<?> updateMyProfile(@RequestBody UpdateUserRequest request) {
-
-        // ...
-        // send 204 no content frontend will hnadle this
-    }
-
-    @DeleteMapping("/me")
-    public ResponseEntity<?> deleteMyAccount() {
-        // ...
-
-    }
+//    private Long getCurrentUserId(){
+//        // get the current user id from authentication manager
+//    }
+//    @GetMapping("/me")
+//    public ResponseEntity<UserResponse> getMyProfile() {
+//        // ...
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+//        // ...
+//    }
+//
+//    @GetMapping("/leaderboard")
+//    public ResponseEntity<LeaderboardResponse> getLeaderboard() {
+//        // ...
+//    }
+//
+//    @PutMapping("/me")
+//    public ResponseEntity<?> updateMyProfile(@RequestBody UpdateUserRequest request) {
+//
+//        // ...
+//        // send 204 no content frontend will hnadle this
+//    }
+//
+//    @DeleteMapping("/me")
+//    public ResponseEntity<?> deleteMyAccount() {
+//        // ...
+//
+//    }
 }
 

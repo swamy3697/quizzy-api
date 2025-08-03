@@ -37,7 +37,6 @@ public class JwtUtil {
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     }
-
     /**
      * Get signing key for refresh tokens
      */
@@ -48,16 +47,15 @@ public class JwtUtil {
     /**
      * Generate Access Token
      */
-    public String generateAccessToken(UserDetails userDetails) {
-        return generateToken(userDetails, getSigningKey(), ACCESS_TOKEN_EXPIRATION);
+    public String generateAccessToken(User user) {
+        return generateToken(user, getSigningKey(), ACCESS_TOKEN_EXPIRATION);
     }
 
     /**
      * Generate Refresh Token
      */
-    public String generateRefreshToken(UserDetails userDetails) {
+    public String generateRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        User user = ((MyUserPrincipal) userDetails).getUser();
         claims.put("sub", user.getUserId());
 
         return Jwts.builder()
@@ -71,9 +69,9 @@ public class JwtUtil {
     /**
      * Common token generation logic
      */
-    private String generateToken(UserDetails userDetails, SecretKey key, long expiration) {
+    private String generateToken(User user, SecretKey key, long expiration) {
         Map<String, Object> claims = new HashMap<>();
-        User user = ((MyUserPrincipal) userDetails).getUser();
+
         claims.put("sub", user.getUserId());
 
         return Jwts.builder()
@@ -101,9 +99,9 @@ public class JwtUtil {
     /**
      * Extract Username from Access Token (for backward compatibility)
      */
-    public String extractUsername(String token) {
-        return extractUserId(token);
-    }
+//    public String extractUserid(String token) {
+//        return extractUserId(token);
+//    }
 
     /**
      * Extract Username from Refresh Token (for backward compatibility)

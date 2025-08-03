@@ -9,5 +9,4 @@ public class LeaderboardResponse {
     LeaderboardUser mine; // his details
     List<LeaderboardUser> leaderboard; // other users
     int totalCount; //  // total user count
-
 }
