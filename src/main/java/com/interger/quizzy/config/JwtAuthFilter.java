@@ -2,6 +2,7 @@ package com.interger.quizzy.config;
 
 
 import com.interger.quizzy.model.User;
+import com.interger.quizzy.service.MyUserDetailsService;
 import com.interger.quizzy.service.MyUserPrincipal;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,10 +22,10 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+    private final MyUserDetailsService userDetailsService;
 
     // Constructor injection instead of field injection
-    public JwtAuthFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(JwtUtil jwtUtil, MyUserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
@@ -45,9 +46,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         try {
             final String userIdStr = jwtUtil.extractUserId(jwt);
+            Long userId = Long.parseLong(userIdStr);
 
             if (userIdStr != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userIdStr);
+                UserDetails userDetails = this.userDetailsService.loadUserByUserId(userId);
 
                 if (jwtUtil.validateToken(jwt, userDetails)) {
                     // Create authentication token with user principal

@@ -24,11 +24,13 @@ public class QuizRepository {
               RETURNING question_id
             ),
             tag_insert AS (
-              INSERT INTO tags (tag)
-              SELECT UNNEST(?::citext[])
-              ON CONFLICT (tag) DO UPDATE 
-              SET count = tags.count + 1
-              RETURNING tag_id
+                       INSERT INTO tags (tag, count, hotness_score)
+                       SELECT UNNEST(?::citext[]), 1, 1
+                       ON CONFLICT (tag) DO UPDATE
+                       SET
+                         count = tags.count + 1,
+                         hotness_score = tags.hotness_score + 1
+                       RETURNING tag_id
             ),
             question_tag_insert AS (
               INSERT INTO question_tags(question_id, tag_id)

@@ -17,22 +17,27 @@ public class MyUserDetailsService implements UserDetailsService {
     public MyUserDetailsService(UserService userService) {
         this.userService = userService;
     }
-
     @Override
-    public UserDetails loadUserByUsername(String userIdStr) throws UsernameNotFoundException {
-        Long userId;
-        try {
-            userId = Long.parseLong(userIdStr);
-        } catch (NumberFormatException e) {
-            throw new UsernameNotFoundException("Invalid user ID: " + userIdStr);
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        User user;
+
+        if (identifier.contains("@")) {
+            user = userService.getUserByUserEmail(identifier);
+        } else {
+            user = userService.getUserByUserName(identifier);
         }
 
-        Optional<User> useropt = userService.getUserById(userId); // Add this method in UserService
-        if (useropt.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with ID: " + userIdStr);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + identifier);
         }
 
-        return new MyUserPrincipal(useropt.get());
+        return new MyUserPrincipal(user);
     }
 
+    // ✅ Used explicitly in JwtAuthFilter for user_id-based lookup
+    public UserDetails loadUserByUserId(Long userId) {
+        return userService.getUserById(userId)
+                .map(MyUserPrincipal::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+    }
 }
